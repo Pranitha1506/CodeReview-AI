@@ -1,0 +1,663 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CodeReview AI | Intelligent Code Analysis</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="container navbar-content">
+        <a href="/" class="brand">
+            ⚡ CodeReview AI
+        </a>
+
+        <div class="navbar-right">
+            <span class="live-badge">● Gemini Powered</span>
+        </div>
+    </div>
+</header>
+
+
+<main class="container">
+
+    <section class="hero">
+        <p class="eyebrow">INTELLIGENT CODE ANALYSIS PLATFORM</p>
+
+        <h1>Write better code with AI.</h1>
+
+        <p>
+            Analyze source code, identify potential bugs,
+            discover optimization opportunities and improve
+            code quality with intelligent assistance.
+        </p>
+    </section>
+
+
+    <section class="dashboard-section">
+
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">WORKSPACE OVERVIEW</p>
+                <h2>Dashboard</h2>
+            </div>
+
+            <button
+                type="button"
+                id="refreshDashboardBtn"
+                class="secondary-btn">
+                ↻ Refresh
+            </button>
+        </div>
+
+        <div class="dashboard-grid">
+
+            <div class="dashboard-card">
+                <div class="dashboard-icon">📊</div>
+
+                <p>Total Reviews</p>
+
+                <h2 id="totalReviews">0</h2>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="dashboard-icon">🛠️</div>
+
+                <p>Total Fixes</p>
+
+                <h2 id="totalFixes">0</h2>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="dashboard-icon">⭐</div>
+
+                <p>Average Review Score</p>
+
+                <h2 id="averageScore">--</h2>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="dashboard-icon">🐛</div>
+
+                <p>Bugs Identified</p>
+
+                <h2 id="totalBugs">0</h2>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="workspace">
+
+        <div class="editor-card">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Code Editor</h2>
+
+                    <p>
+                        Enter your source code and select an operation.
+                    </p>
+                </div>
+
+                <span class="live-badge">● Ready</span>
+
+            </div>
+
+
+            <div class="editor-toolbar">
+
+                <label for="language">Programming Language</label>
+
+                <select id="language">
+                    <option value="Python">Python</option>
+                    <option value="Java">Java</option>
+                    <option value="JavaScript">JavaScript</option>
+                    <option value="C">C</option>
+                    <option value="C++">C++</option>
+                </select>
+
+            </div>
+
+
+            <textarea
+                id="codeInput"
+                spellcheck="false"
+                placeholder="Paste your source code here...">def add(a, b):
+    return a + b</textarea>
+
+
+            <div class="editor-footer">
+
+                <span id="codeCount">0 characters</span>
+
+                <button
+                    type="button"
+                    id="clearBtn"
+                    class="secondary-btn">
+                    Clear
+                </button>
+
+                <button
+                    type="button"
+                    id="analyzeBtn"
+                    class="primary-btn">
+                    ✨ Analyze Code
+                </button>
+
+                <button
+                    type="button"
+                    id="fixBtn"
+                    class="fix-btn">
+                    🛠 Fix My Code
+                </button>
+
+            </div>
+
+            <p
+                id="statusMessage"
+                class="status-message"
+                role="status"
+                aria-live="polite">
+            </p>
+
+        </div>
+
+
+        <aside class="info-card">
+
+            <h3>What you'll get</h3>
+
+            <div class="feature">
+
+                <span class="feature-icon">🐛</span>
+
+                <div>
+                    <strong>Bug Detection</strong>
+
+                    <p>
+                        Identify potential logical and runtime errors.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <span class="feature-icon">🔒</span>
+
+                <div>
+                    <strong>Security Analysis</strong>
+
+                    <p>
+                        Discover potential security weaknesses.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <span class="feature-icon">⚡</span>
+
+                <div>
+                    <strong>Optimization</strong>
+
+                    <p>
+                        Find opportunities to improve performance.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <span class="feature-icon">📊</span>
+
+                <div>
+                    <strong>Quality Score</strong>
+
+                    <p>
+                        Understand the overall quality of your code.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="feature">
+
+                <span class="feature-icon">🧠</span>
+
+                <div>
+                    <strong>Intelligent Code Fix</strong>
+
+                    <p>
+                        Get suggested corrections with explanations
+                        and code comparisons.
+                    </p>
+                </div>
+
+            </div>
+
+        </aside>
+
+    </section>
+
+
+    <section
+        id="resultsSection"
+        class="results-section hidden">
+
+        <div class="results-heading">
+
+            <div>
+                <p class="eyebrow">ANALYSIS REPORT</p>
+
+                <h2>Code Review Results</h2>
+            </div>
+
+            <span id="reviewSummary"></span>
+            <span id="reviewSourceBadge" class="source-badge"></span>
+
+        </div>
+
+
+        <div class="score-card">
+
+            <div>
+                <p>Overall Code Quality Score</p>
+
+                <h2 id="scoreValue">--/100</h2>
+
+                <p id="scoreLabel">Analysis completed</p>
+            </div>
+
+            <div
+                class="score-circle"
+                id="scoreCircle">
+
+                <span id="circleValue">--</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="result-grid">
+
+            <div class="result-card">
+
+                <h3>🐛 Bugs Detected</h3>
+
+                <div id="bugsResult">
+                    <p class="muted">No analysis available.</p>
+                </div>
+
+            </div>
+
+
+            <div class="result-card">
+
+                <h3>🔒 Security Issues</h3>
+
+                <div id="securityResult">
+                    <p class="muted">No analysis available.</p>
+                </div>
+
+            </div>
+
+
+            <div class="result-card">
+
+                <h3>⚡ Optimization Suggestions</h3>
+
+                <div id="optimizationResult">
+                    <p class="muted">No analysis available.</p>
+                </div>
+
+            </div>
+
+
+            <div class="result-card">
+
+                <h3>📝 Code Quality</h3>
+
+                <p id="qualityResult"></p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section
+        id="fixSection"
+        class="fix-section hidden">
+
+
+        <div
+            class="decision-panel"
+            id="smartDecisionPanel">
+
+            <div class="decision-top">
+
+                <h3>🧠 Smart Fix Decision</h3>
+
+                <span
+                    id="fixDecisionBadge"
+                    class="decision-badge">
+                    Checking...
+                </span>
+
+                <span
+                    id="fixSourceBadge"
+                    class="fix-source-badge">
+                </span>
+
+            </div>
+
+            <p id="decisionReason"></p>
+
+            <div
+                id="syntaxValidation"
+                class="syntax-validation">
+            </div>
+
+        </div>
+
+
+        <div class="fix-header">
+
+            <div>
+
+                <p class="eyebrow">INTELLIGENT CODE FIX ENGINE</p>
+
+                <h2>AI Code Fix Results</h2>
+
+                <p
+                    id="fixSummary"
+                    class="fix-summary">
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                id="downloadFixedBtn"
+                class="primary-btn">
+                ↓ Download Fixed Code
+            </button>
+
+        </div>
+
+
+        <div class="fix-comparison">
+
+            <div class="result-card">
+
+                <h3>Original Code</h3>
+
+                <pre><code id="originalCode"></code></pre>
+
+            </div>
+
+
+            <div class="result-card">
+
+                <h3>Corrected Code</h3>
+
+                <pre><code id="fixedCode"></code></pre>
+
+                <button
+                    type="button"
+                    id="copyFixedBtn"
+                    class="secondary-btn">
+                    Copy Fixed Code
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="result-card">
+
+            <h3>Changes Made</h3>
+
+            <div id="changesResult"></div>
+
+        </div>
+
+
+        <div class="fix-comparison">
+
+            <div class="result-card">
+
+                <h3>Remaining Issues</h3>
+
+                <div id="remainingIssues"></div>
+
+            </div>
+
+
+            <div class="result-card">
+
+                <h3>Recommended Tests</h3>
+
+                <div id="testingNotes"></div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="result-card diff-card"
+            id="smartDiffCard">
+
+            <h3>📊 Line-by-Line Code Differences</h3>
+
+            <div
+                id="diffSummary"
+                class="diff-summary">
+            </div>
+
+            <div
+                id="diffViewer"
+                class="diff-viewer">
+            </div>
+
+        </div>
+
+
+        <p class="fix-disclaimer">
+            AI-generated code is a suggestion. Review and test it
+            before using it. The application does not execute
+            generated code.
+        </p>
+
+    </section>
+
+
+    <section class="history-section">
+
+        <div class="history-heading">
+
+            <div>
+                <p class="eyebrow">YOUR SAVED WORK</p>
+
+                <h2>Activity History</h2>
+
+                <p>
+                    Revisit your previous code reviews and
+                    code-fix results.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                id="refreshHistoryBtn"
+                class="secondary-btn">
+                ↻ Refresh
+            </button>
+
+        </div>
+
+
+        <div class="history-tabs">
+
+            <button
+                type="button"
+                class="history-tab active"
+                id="reviewHistoryTab"
+                data-history-tab="reviews">
+
+                📊 Code Review History
+
+            </button>
+
+
+            <button
+                type="button"
+                class="history-tab"
+                id="fixHistoryTab"
+                data-history-tab="fixes">
+
+                🛠️ Code Fix History
+
+            </button>
+
+        </div>
+
+
+        <div class="history-toolbar">
+
+            <div class="history-search">
+
+                <label for="historySearch">
+                    Search history
+                </label>
+
+                <input
+                    type="search"
+                    id="historySearch"
+                    placeholder="Search by ID or language...">
+
+            </div>
+
+
+            <div class="history-filter">
+
+                <label for="historyLanguageFilter">
+                    Language
+                </label>
+
+                <select id="historyLanguageFilter">
+
+                    <option value="all">All Languages</option>
+
+                    <option value="Python">Python</option>
+
+                    <option value="Java">Java</option>
+
+                    <option value="JavaScript">JavaScript</option>
+
+                    <option value="C">C</option>
+
+                    <option value="C++">C++</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="history-sort">
+
+                <label for="historySort">
+                    Sort by
+                </label>
+
+                <select id="historySort">
+
+                    <option value="newest">Newest First</option>
+
+                    <option value="oldest">Oldest First</option>
+
+                    <option value="score-high">Highest Score</option>
+
+                    <option value="score-low">Lowest Score</option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="historySummary"
+            class="history-summary">
+        </div>
+
+
+        <div
+            id="historyContainer"
+            class="history-container">
+
+            <p class="muted">
+                Loading history...
+            </p>
+
+        </div>
+
+
+        <div
+            id="historyEmptyState"
+            class="history-empty hidden">
+
+            <div class="empty-icon">📂</div>
+
+            <h3>No records found</h3>
+
+            <p>
+                Your saved code reviews and fixes will appear here.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="app-footer">
+
+    <p>
+        CodeReview AI · Intelligent Code Review and Fix Management
+    </p>
+
+    <span>
+        Built with Python, FastAPI, MySQL and Google Gemini
+    </span>
+
+</footer>
+
+
+<script src="/static/js/app.js"></script>
+
+</body>
+</html>
